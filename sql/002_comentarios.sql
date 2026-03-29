@@ -141,6 +141,11 @@ COMMENT ON TABLE otimizar_moagem_aura.s1c_v1_regimes IS
 COMMENT ON TABLE otimizar_moagem_aura.s1c_v1_regime_centroides IS
 'Centróides dos regimes v1 por variável. Origem: 01_sprint1/clusters/c_clustering_regimes_v1.ipynb';
 
+COMMENT ON TABLE otimizar_moagem_aura.s1c_v1_dados_com_clusters IS
+'Dataset completo v1 com clusters atribuídos (27 variáveis pipoint + Timestamp + regime). 632.985 linhas.
+Baseline: StandardScaler, sem filtro de operação estável.
+Origem: 01_sprint1/clusters/c_clustering_regimes_v1.ipynb';
+
 COMMENT ON TABLE otimizar_moagem_aura.s1c_v2_metricas_clustering IS
 'Métricas de clustering v2: RobustScaler, ~16 variáveis curadas, Hampel filter, remoção de colinearidade.
 DBSCAN com sweep eps×min_samples. Origem: 01_sprint1/clusters/c_clustering_regimes_v2.ipynb';
@@ -156,13 +161,8 @@ COMMENT ON TABLE otimizar_moagem_aura.s1c_v2_regimes IS
 COMMENT ON TABLE otimizar_moagem_aura.s1c_v2_regime_centroides IS
 'Centróides dos regimes v2 por variável. Origem: 01_sprint1/clusters/c_clustering_regimes_v2.ipynb';
 
-COMMENT ON TABLE otimizar_moagem_aura.s1c_v1_dados_com_clusters IS
-'Dataset completo v1 com clusters atribuídos (26 variáveis pipoint + regime).
-Baseline: StandardScaler, 26 variáveis, sem filtro de operação estável.
-Origem: 01_sprint1/clusters/c_clustering_regimes_v1.ipynb';
-
 COMMENT ON TABLE otimizar_moagem_aura.s1c_v2_dados_com_clusters IS
-'Dataset completo v2 com clusters atribuídos (variáveis pipoint curadas + regime).
+'Dataset completo v2 com clusters atribuídos (27 variáveis pipoint + Timestamp + regime). 632.985 linhas.
 RobustScaler, ~16 variáveis curadas, Hampel filter, remoção de colinearidade.
 Origem: 01_sprint1/clusters/c_clustering_regimes_v2.ipynb';
 
@@ -196,6 +196,76 @@ de minutos no mesmo regime, com início, fim e duração.
 Origem: e_analise_temporal_regimes.ipynb (S1e)';
 
 -- ==============================================================================
+-- S1e — ANÁLISE TEMPORAL VERSIONADA (v1, v2, v3)
+-- ==============================================================================
+-- Cada versão de clustering gera 5 tabelas de análise temporal.
+-- Mesma estrutura das tabelas s1e_* (sem prefixo de versão), que armazenam
+-- apenas a versão selecionada (V2). Estas preservam as 3 versões para comparação.
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v1_blocos_regime IS
+'Blocos contíguos de regime v1 (run-length encoding). 7.773 blocos.
+Campos: bloco_id, regime, inicio, fim, duracao_min, duracao_h, versao.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v1_distribuicao_mensal IS
+'Proporção mensal de cada regime v1 (formato long: mes, regime, percentual, versao).
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v1_matriz_transicao IS
+'Matriz de transição de Markov v1 (minuto a minuto). 2 regimes → 4 transições.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v1_permanencia_regimes IS
+'Estatísticas de permanência por regime v1: durações min/mediana/média/max, pct blocos curtos/longos.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v1_taxa_transicao IS
+'Taxa de transição entre regimes v1 por mês (transições/hora).
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v2_blocos_regime IS
+'Blocos contíguos de regime v2 (run-length encoding). 15.915 blocos.
+Campos: bloco_id, regime, inicio, fim, duracao_min, duracao_h, versao.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v2_distribuicao_mensal IS
+'Proporção mensal de cada regime v2 (formato long: mes, regime, percentual, versao).
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v2_matriz_transicao IS
+'Matriz de transição de Markov v2 (minuto a minuto). 3 regimes → 9 transições.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v2_permanencia_regimes IS
+'Estatísticas de permanência por regime v2: durações min/mediana/média/max, pct blocos curtos/longos.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v2_taxa_transicao IS
+'Taxa de transição entre regimes v2 por mês (transições/hora).
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v3_blocos_regime IS
+'Blocos contíguos de regime v3 (run-length encoding). 28.855 blocos.
+Campos: bloco_id, regime, inicio, fim, duracao_min, duracao_h, versao.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v3_distribuicao_mensal IS
+'Proporção mensal de cada regime v3 (formato long: mes, regime, percentual, versao).
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v3_matriz_transicao IS
+'Matriz de transição de Markov v3 (minuto a minuto). 3 regimes → 9 transições.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v3_permanencia_regimes IS
+'Estatísticas de permanência por regime v3: durações min/mediana/média/max, pct blocos curtos/longos.
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s1e_v3_taxa_transicao IS
+'Taxa de transição entre regimes v3 por mês (transições/hora).
+Origem: e_analise_temporal_regimes.ipynb (S1e)';
+
+-- ==============================================================================
 -- S2a — CARIMBAMENTO (DUREZA SAG)
 -- ==============================================================================
 
@@ -209,6 +279,21 @@ COMMENT ON TABLE otimizar_moagem_aura.s2a_comparacao_clusters_classes IS
 Valores baixos indicam que regimes e dureza capturam dimensões diferentes do processo.
 Origem: a_carimbamento_preditor.ipynb (S2a)';
 
+COMMENT ON TABLE otimizar_moagem_aura.s2a_exp_metricas_v1 IS
+'Métricas de concordância regimes vs dureza para clustering V1.
+Campos: versao_clustering, n_regimes, n_registros, ari, nmi, cramers_v, chi2, p_value.
+Tabela exploratória para comparação entre versões. Origem: a_carimbamento_preditor.ipynb (S2a)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2a_exp_metricas_v2 IS
+'Métricas de concordância regimes vs dureza para clustering V2 (versão selecionada).
+Campos: versao_clustering, n_regimes, n_registros, ari, nmi, cramers_v, chi2, p_value.
+Origem: a_carimbamento_preditor.ipynb (S2a)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2a_exp_metricas_v3 IS
+'Métricas de concordância regimes vs dureza para clustering V3.
+Campos: versao_clustering, n_regimes, n_registros, ari, nmi, cramers_v, chi2, p_value.
+Tabela exploratória para comparação entre versões. Origem: a_carimbamento_preditor.ipynb (S2a)';
+
 -- ==============================================================================
 -- S2b — PREPARAÇÃO PARA MODELAGEM
 -- ==============================================================================
@@ -220,7 +305,31 @@ Origem: b_preparacao_modelagem.ipynb (S2b)';
 
 COMMENT ON TABLE otimizar_moagem_aura.s2b_split_metadata IS
 'Metadados do split temporal: conjunto (train/val/test), n_registros, período, percentual.
-Split cronológico (sem shuffle): treino<set/2025, validação set-nov/2025, teste>=dez/2025.
+Split cronológico (sem shuffle): treino<set/2025, validação set-dez/2025, teste>=dez/2025.
+Origem: b_preparacao_modelagem.ipynb (S2b)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2b_v2_features IS
+'Lista de features de versão anterior da preparação (exploratória). 105 features com ranking.
+Campos: feature, ranking. Origem: b_preparacao_modelagem.ipynb (S2b, execução anterior)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2b_v2_split_metadata IS
+'Metadados do split temporal de versão anterior (exploratória).
+Campos: conjunto, n_registros, periodo_inicio, periodo_fim, pct_total.
+Origem: b_preparacao_modelagem.ipynb (S2b, execução anterior)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2b_dataset_train IS
+'Dataset de treino com 105 features + regime (443.089 linhas, ago/2024–set/2025).
+27 variáveis originais + 78 engenheiradas (lags, médias móveis, desvios, derivadas).
+Normalizado com RobustScaler ajustado neste conjunto. Origem: b_preparacao_modelagem.ipynb (S2b)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2b_dataset_val IS
+'Dataset de validação com 105 features + regime (94.947 linhas, set–dez/2025).
+Usado para seleção de hiperparâmetros e comparação entre modelos.
+Origem: b_preparacao_modelagem.ipynb (S2b)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2b_dataset_test IS
+'Dataset de teste com 105 features + regime (94.949 linhas, dez/2025–mar/2026).
+Dados inéditos para avaliação final do modelo selecionado.
 Origem: b_preparacao_modelagem.ipynb (S2b)';
 
 -- ==============================================================================
@@ -235,21 +344,54 @@ Origem: c_treinamento_modelos.ipynb (S2c)';
 
 COMMENT ON TABLE otimizar_moagem_aura.s2_importancia_features IS
 'Ranking de importância das 105 features do melhor modelo (LightGBM).
+Campos: modelo, feature, importancia, ranking.
 Baseado em feature_importances_ nativa (gain).
 Origem: c_treinamento_modelos.ipynb (S2c)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2c_predicoes_teste IS
+'Predições do melhor modelo (LightGBM) no conjunto de teste (94.949 linhas).
+Campos: Timestamp, regime_real, regime_pred, proba_R0, proba_R1, proba_R2.
+Consumido pelo dashboard para visualização de predições vs real.
+Origem: c_treinamento_modelos.ipynb (S2c)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2_comparacao_oficial_v2 IS
+'Comparação oficial entre abordagens de classificação (versão anterior, exploratória).
+Campos: Abordagem, Accuracy, F1-macro, F1-weighted, Precision/Recall por regime.
+Origem: c_treinamento_modelos.ipynb (S2c, execução anterior)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2c_v2_modelos_val IS
+'Métricas dos 3 modelos no conjunto de validação (versão anterior, exploratória).
+Campos: Modelo, Accuracy, F1-macro, F1-weighted, Precision-macro, Recall-macro, AUC-weighted, Tempo.
+Origem: c_treinamento_modelos.ipynb (S2c, execução anterior)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2c_v2_modelos_teste IS
+'Métricas dos 3 modelos no conjunto de teste (versão anterior, exploratória).
+Campos: Modelo, Accuracy, F1-macro, F1-weighted, Precision/Recall por regime, AUC-weighted.
+Origem: c_treinamento_modelos.ipynb (S2c, execução anterior)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2c_v2_predicoes_teste IS
+'Predições do teste com pós-processamento (versão anterior, exploratória).
+Campos: Timestamp, regime_real, pred_base, pred_smooth, pred_threshold, pred_combined, proba_R0/R1/R2.
+Origem: c_treinamento_modelos.ipynb (S2c, execução anterior)';
+
+COMMENT ON TABLE otimizar_moagem_aura.s2c_v2_resultados IS
+'Resultados consolidados por abordagem de pós-processamento (versão anterior, exploratória).
+Campos: Abordagem, Accuracy, F1-macro, F1-weighted, Precision/Recall por regime.
+Origem: c_treinamento_modelos.ipynb (S2c, execução anterior)';
 
 -- ==============================================================================
 -- S3 — VALIDAÇÃO E RESULTADOS FINAIS
 -- ==============================================================================
 
 COMMENT ON TABLE otimizar_moagem_aura.s3_validacao_temporal IS
-'Validação temporal do modelo: accuracy e F1-macro em janelas semanais rolling.
+'Validação temporal do modelo: accuracy e F1-macro em janelas semanais rolling. 13 períodos.
+Campos: periodo_inicio, periodo_fim, accuracy, f1_macro, n_registros.
 Verifica degradação do modelo ao longo do tempo.
-Origem: Sprint 3 (a ser executado)';
+Origem: Sprint 3';
 
 COMMENT ON TABLE otimizar_moagem_aura.s3_resultados_finais IS
-'Resultados finais consolidados do projeto em formato chave-valor (aspecto, valor).
-Origem: Sprint 3 (a ser executado)';
+'Resultados finais consolidados do projeto em formato chave-valor (aspecto, valor). 12 entradas.
+Origem: Sprint 3';
 
 -- ==============================================================================
 -- TABELA DE IMAGENS
@@ -262,14 +404,10 @@ filename, image_data (BYTEA), mime_type.
 Consumidas pelo dashboard React para exibição sem dependência de disco.';
 
 -- ==============================================================================
--- TABELAS DINÂMICAS (criadas via modo=replace, sem schema fixo no SQL)
+-- VIEW — IMAGENS EM BASE64
 -- ==============================================================================
--- As tabelas abaixo são criadas automaticamente pelo salvar_dataframe(modo="replace")
--- e não possuem definição fixa neste arquivo SQL. O schema é derivado do DataFrame.
---
--- s1c_v1_dados_com_clusters — Dataset completo v1 (26 pipoint + regime)
--- s1c_v2_dados_com_clusters — Dataset completo v2 (pipoint curados + FEAT_ + regime)
--- s2b_dataset_train        — Dataset de treino (105 features + regime, 424k linhas)
--- s2b_dataset_val          — Dataset de validação (105 features + regime, 101k linhas)
--- s2b_dataset_test         — Dataset de teste (105 features + regime, 108k linhas)
--- s2c_predicoes_teste      — Predições do melhor modelo no teste (regime_real, regime_pred, probas)
+
+COMMENT ON VIEW otimizar_moagem_aura.vw_images_base64 IS
+'View que expõe as imagens de stage_images como data URIs base64 (image_url).
+Campos: id, stage, image_key, filename, mime_type, created_at, tamanho_bytes, tamanho_kb, image_url.
+Consumida pelo dashboard para renderização direta no frontend sem endpoint binário.';

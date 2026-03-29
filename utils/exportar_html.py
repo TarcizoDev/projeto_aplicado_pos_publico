@@ -5,6 +5,7 @@ Uso:
     python exportar_html.py              # exporta todos (pipeline + clusters)
     python exportar_html.py s1a          # exporta só o S1a
     python exportar_html.py s1c s2a      # exporta S1c e S2a
+    python exportar_html.py s3a s3b s3c  # exporta só os da Sprint 3
     python exportar_html.py v1 v2 v3    # exporta só os de clusters
     python exportar_html.py --pipeline   # exporta só os da pipeline (sem clusters)
 """
@@ -15,7 +16,9 @@ import nbformat
 
 PROJECT_ROOT = Path(r"C:\ScriptsDatamindsPIP\4-Projeto aplicado")
 HTML_DIR = PROJECT_ROOT / "html"
+GDRIVE_HTML_DIR = Path(r"G:\Meu Drive\1-Pos Graduação\4-Projeto aplicado\html")
 HTML_DIR.mkdir(parents=True, exist_ok=True)
+GDRIVE_HTML_DIR.mkdir(parents=True, exist_ok=True)
 
 # Notebooks da pipeline ativa
 NOTEBOOKS = {
@@ -27,6 +30,10 @@ NOTEBOOKS = {
     "s2a": PROJECT_ROOT / "notebooks" / "02_sprint2" / "a_carimbamento_preditor.ipynb",
     "s2b": PROJECT_ROOT / "notebooks" / "02_sprint2" / "b_preparacao_modelagem.ipynb",
     "s2c": PROJECT_ROOT / "notebooks" / "02_sprint2" / "c_treinamento_modelos.ipynb",
+    "s2d": PROJECT_ROOT / "notebooks" / "02_sprint2" / "comparacao_abordagens.ipynb",
+    "s3a": PROJECT_ROOT / "notebooks" / "03_sprint3" / "a_validacao_cruzada.ipynb",
+    "s3b": PROJECT_ROOT / "notebooks" / "03_sprint3" / "b_visualizacoes_finais.ipynb",
+    "s3c": PROJECT_ROOT / "notebooks" / "03_sprint3" / "c_resultados_finais.ipynb",
 }
 
 # Notebooks de clusters (versões de experimentação)
@@ -59,13 +66,22 @@ def exportar(tag: str, nb_path: Path, prefix: str = ""):
     except ValueError:
         sub_dir = Path()
 
+    out_name = f"{prefix}{nb_path.stem}.html"
+
+    # Salvar local
     out_dir = HTML_DIR / sub_dir
     out_dir.mkdir(parents=True, exist_ok=True)
-
-    out_name = f"{prefix}{nb_path.stem}.html"
     out_path = out_dir / out_name
     out_path.write_text(html_body, encoding="utf-8")
-    print(f"  [{tag}] {sub_dir / out_name} ({out_path.stat().st_size / 1e6:.1f} MB)")
+
+    # Copiar para Google Drive
+    gdrive_dir = GDRIVE_HTML_DIR / sub_dir
+    gdrive_dir.mkdir(parents=True, exist_ok=True)
+    gdrive_path = gdrive_dir / out_name
+    gdrive_path.write_text(html_body, encoding="utf-8")
+
+    size_mb = out_path.stat().st_size / 1e6
+    print(f"  [{tag}] {sub_dir / out_name} ({size_mb:.1f} MB) → local + Google Drive")
 
 
 def main():
